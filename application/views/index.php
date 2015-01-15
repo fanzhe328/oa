@@ -18,9 +18,11 @@
 				                        </form>
 				                    </section>
 				                </div>
+				                <!--
 				                <div class="span3 hidden-phone searchlineheight">
 										<a href='' class="btn btn-welcome">高级检索</a>
 				                </div>
+				            -->
 				            </div>
 			            </div>
 			        </div>

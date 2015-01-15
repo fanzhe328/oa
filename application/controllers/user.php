@@ -17,7 +17,6 @@ class User extends CI_Controller {
 		$config['base_url'] = base_url().'/index.php?'.$base_uri.'&type='.$type.'&search='.$search;
 		$config['total_rows'] = $total_page;
 		$config['per_page'] = $per_page;
-		$config['uri_segment'] = 5;
 		$config['full_tag_open'] = '<ul>';
 		$config['full_tag_close'] = '</ul>';
 		$config['first_link'] = '第一页';
