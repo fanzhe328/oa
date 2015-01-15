@@ -75,12 +75,11 @@ class User extends CI_Controller {
 		$this->load->view(self::FOOT);
 	}
 // 
-	public function journal_search($type = 1, $search_text = '', $offset = -1)
+	public function journal_search()
 	{
 		$type  = $this->input->get('type');
 		$search_text  = $this->input->get('search');
 		$offset = $this->input->get('per_page',0);
-		var_dump($offset)
 		$this->load->model('journal_model','jour');
 		$per_page = 5;
 		$res = $this->jour->search_full($search_text, $per_page, $offset);
