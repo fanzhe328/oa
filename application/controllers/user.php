@@ -17,7 +17,6 @@ class User extends CI_Controller {
 		$config['base_url'] = base_url().'/index.php?'.$base_uri.'&type='.$type.'&search='.$search;
 		$config['total_rows'] = $total_page;
 		$config['per_page'] = $per_page;
-		$config['uri_segment'] = 5;
 		$config['full_tag_open'] = '<ul>';
 		$config['full_tag_close'] = '</ul>';
 		$config['first_link'] = '第一页';
@@ -78,12 +77,10 @@ class User extends CI_Controller {
 // 
 	public function journal_search($type = 1, $search_text = '', $offset = -1)
 	{
-		if($offset == -1)
-		{
-			$search_text  = $this->input->get('search');
-			$offset = 0;
-		}
-
+		$type  = $this->input->get('type');
+		$search_text  = $this->input->get('search');
+		$offset = $this->input->get('per_page',0);
+		var_dump($offset)
 		$this->load->model('journal_model','jour');
 		$per_page = 5;
 		$res = $this->jour->search_full($search_text, $per_page, $offset);
