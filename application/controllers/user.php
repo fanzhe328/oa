@@ -74,7 +74,7 @@ class User extends CI_Controller {
 		$this->load->view('journal_detail', $data);
 		$this->load->view(self::FOOT);
 	}
-// 
+
 	public function journal_search()
 	{
 		$type  = $this->input->get('type');
@@ -90,7 +90,56 @@ class User extends CI_Controller {
 		$this->show_journal_list($res, $links);
 	}
 
+	function get_articleInfo_byKW($keyword)
+    {
+        $sparql_str = 'SELECT DISTINCT ?s,?title WHERE {
+               ?s ?p ?o.
+               ?s <http://www.example.com/shuidao_attribute#title> ?title.
+               FILTER( regex(?o, " '.$keyword.' ", "i" ) )
+            } LIMIT 2';
 
+        $format = "application/sparql-results+json";
+        $url = "http://28.42.228.230:8890/sparql/?default-graph-uri=".urlencode("http://localhost:8890/nongkeyuan")."&query=".urlencode($sparql_str)."&format=".urlencode($format)."&timeout=0&debug=on";
+        
+        if($json = file_get_contents($url))
+        {
+	    //echo $json;	
+            $articles = array();
+            $json_data = json_decode($json);  
+            foreach($json_data->results->bindings AS $item)
+            {
+                $uris = split("#", $item->s->value);
+                $a_id = "";
+                if(count($uris)>1){
+                    $a_id = $uris[1];
+                }
+                array_push($articles, array('title'=>$item->title->value,'a_id'=>$a_id));
+            }
+            return array('kw'=>$keyword,'article'=>$articles);
+        }
+        else
+        {
+            return None;
+        }
+    }
+
+    function main_call_article4kw($kw_arr)
+    {
+        $results = array();
+        foreach ($kw_arr as $kw) {
+            array_push($results, $this->get_articleInfo_byKW($kw));
+        }
+
+        echo json_encode($results);
+    }
+
+    function get_relate_info()
+    {
+    	// $kw_arr = explode(",", $_GET['keywords']);
+    	$kw = array('123');
+    	$this->main_call_article4kw($kw);
+    	// var_dump($kw);
+    }
 }
 
 /* End of file user.php */
